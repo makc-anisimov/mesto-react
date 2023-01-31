@@ -1,8 +1,8 @@
-function Card(
-    { card,
-        onCardClick,
-        setIsImagePopupOpened,
-    }) {
+function Card({
+    card,
+    onCardClick,
+    setIsImagePopupOpened,
+}) {
 
     function handleCardClick() {
         onCardClick(card);
@@ -10,7 +10,7 @@ function Card(
     };
 
     return (
-        <li className="element">
+        <>
             <button className="element__delete-button link" type="button" aria-label="Удалить место"></button>
             <img className="element__photo"
                 src={card.link}
@@ -24,9 +24,8 @@ function Card(
                     <p className="element__like-count">{card.likes.length}</p>
                 </div>
             </div>
-        </li>
+        </>
     )
-
 }
 
 export default Card;

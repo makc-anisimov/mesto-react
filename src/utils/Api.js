@@ -15,7 +15,7 @@ class Api {
     return fetch(`${this._baseUrl}/users/me`, {
       headers: this._headers
     })
-      .then(res => this._getResponseData(res))
+    .then(this._getResponseData)
   };
 
 
