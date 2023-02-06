@@ -15,7 +15,7 @@ class Api {
     return fetch(`${this._baseUrl}/users/me`, {
       headers: this._headers
     })
-    .then(this._getResponseData)
+      .then(this._getResponseData)
   };
 
 
@@ -84,7 +84,27 @@ class Api {
     })
       .then(res => this._getResponseData(res))
   }
+  changeLikeCardStatus(id, isLiked) {
+    if (isLiked) {
+      return (
+        api.deleteLike(id)
+        // .then(res => {
+        //   return res;
+        // })
+        // .catch(err => console.log(`Ошибка: ${err}`))
+      )
 
+    } else 
+     {return (
+      api.addLike(id)
+     )
+      // api.addLike(id)
+      //   .then(res => {
+      //     return res;
+      //   })
+      //   .catch(err => console.log(`Ошибка: ${err}`))
+    }
+  }
 }
 
 export const api = new Api({

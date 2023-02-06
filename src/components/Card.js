@@ -1,17 +1,36 @@
+import { useContext } from "react";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
+
 function Card({
     card,
     onCardClick,
     setIsImagePopupOpened,
+    onCardLike,
+    onCardDelete
 }) {
+    const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
+    const isOwn = card.owner._id === currentUser._id;
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    const cardLikeButtonClassName = (`element__like ${isLiked && 'element__like_active'}`);
+
 
     function handleCardClick() {
         onCardClick(card);
         setIsImagePopupOpened(true);
     };
 
+    function handleDeleteClick() {
+        onCardDelete(card)
+        // console.log('удалили карточку',card);// TEST!!!
+    }
+
+    function handleLikeClick() {
+        onCardLike(card)
+    }
+
     return (
         <>
-            <button className="element__delete-button link" type="button" aria-label="Удалить место"></button>
+            {isOwn && <button onClick={handleDeleteClick} className="element__delete-button link" type="button" aria-label="Удалить место" />}
             <img className="element__photo"
                 src={card.link}
                 alt={card.name}
@@ -20,7 +39,7 @@ function Card({
             <div className="element__info">
                 <h2 className="element__title">{card.name}</h2>
                 <div>
-                    <button className="element__like" type="button" aria-label="Нравится"></button>
+                    <button onClick={handleLikeClick} className={cardLikeButtonClassName} type="button" aria-label="Нравится" />
                     <p className="element__like-count">{card.likes.length}</p>
                 </div>
             </div>

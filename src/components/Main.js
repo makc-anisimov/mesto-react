@@ -2,6 +2,9 @@ import pen from '../images/pen.png';
 import { api } from '../utils/Api';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { useContext } from 'react';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { DataCardsContext } from '../contexts/DataCardsContext';
 import Card from './Card';
 
 function Main(
@@ -12,27 +15,34 @@ function Main(
     isImagePopupOpened,
     setIsImagePopupOpened,
     setSelectedCard,
+    handleCardLike,
+    handleCardDelete
   }
 ) {
-  const [userName, setUserName] = useState('');
-  const [userDescription, setUserDescription] = useState('');
-  const [userAvatar, setUserAvatar] = useState('');
-  const [cards, setCards] = useState([]);
+  // const [userName, setUserName] = useState('');
+  // const [userDescription, setUserDescription] = useState('');
+  // const [userAvatar, setUserAvatar] = useState('');
+  // const [cards, setCards] = useState([]);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
+const [ cards, setCards] = useContext(DataCardsContext);
 
+  // console.log('currentUser', currentUser);
 
-  useEffect(() => {
-    Promise.all([
-      api.getProfile(),
-      api.getInitialCards()
-    ])
-      .then(([profile, initialCards]) => {
-        setUserName(profile.name);
-        setUserDescription(profile.about);
-        setUserAvatar(profile.avatar);
-        setCards(initialCards);
-      })
-      .catch(err => console.log(`Ошибка: ${err}`));
-  }, []);
+  // useEffect(() => {
+  //   Promise.all([
+  //     // api.getProfile(),
+  //     api.getInitialCards()
+  //   ])
+  //     .then(([
+  //       // profile, 
+  //       initialCards]) => {
+  //       // setUserName(profile.name);
+  //       // setUserDescription(profile.about);
+  //       // setUserAvatar(profile.avatar);
+  //       setCards(initialCards);
+  //     })
+  //     .catch(err => console.log(`Ошибка: ${err}`));
+  // }, []);
 
   const generatedCards = cards.map((card) => (
     <li className="element" key={card._id}>
@@ -41,6 +51,8 @@ function Main(
         onCardClick={setSelectedCard}
         isImagePopupOpened={isImagePopupOpened}
         setIsImagePopupOpened={setIsImagePopupOpened}
+        onCardLike={handleCardLike}
+        onCardDelete={handleCardDelete}
       />
     </li>
   ))
@@ -54,13 +66,13 @@ function Main(
             <img
               onClick={onEditAvatar}
               className="profile__photo"
-              src={userAvatar}
+              src={currentUser.avatar}
               alt="Фото профиля"
             />
           </div>
           <div className="profile__info">
             <div className="profile__title">
-              <h1 className="profile__name">{userName}</h1>
+              <h1 className="profile__name">{currentUser.name}</h1>
               <button
                 onClick={onEditProfile}
                 className="profile__edit link"
@@ -68,7 +80,7 @@ function Main(
                 aria-label="Редактировать профиль">
               </button>
             </div>
-            <p className="profile__job">{userDescription}</p>
+            <p className="profile__job">{currentUser.about}</p>
           </div>
         </div>
         <button
