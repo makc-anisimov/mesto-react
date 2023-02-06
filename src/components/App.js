@@ -8,6 +8,7 @@ import ImagePopup from './ImagePopup';
 import { api } from '../utils/Api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { DataCardsContext } from '../contexts/DataCardsContext';
+import EditProfilePopup from './EditProfilePopup';
 
 
 
@@ -63,13 +64,22 @@ function App() {
   }
 
   function handleCardDelete(card) {
-    const updatedCards = cards.filter( cardItem => cardItem.id != card._id);
+    const updatedCards = cards.filter(cardItem => cardItem.id != card._id);
     api.deleteCard(card._id)
-    .then(() => {
-      console.log('updatedCards', updatedCards);// проверка нового массива
-      setCards(updatedCards);
-    })
-    .catch(err => console.log(`Ошибка: ${err}`))
+      .then(() => {
+        console.log('updatedCards', updatedCards);// ТЕСТ!!! проверка нового массива
+        setCards(updatedCards);
+      })
+      .catch(err => console.log(`Ошибка: ${err}`))
+  }
+
+  function handleUpdateUser(userInfo) {
+    api.edtiProfile(userInfo.name, userInfo.about)
+      .then((newUserInfo) => {
+        setCurrentUser(newUserInfo);
+        closeAllPopups();
+      })
+      .catch(err => console.log(`Ошибка: ${err}`))
   }
 
 
@@ -102,21 +112,13 @@ function App() {
             }
             onClose={closeAllPopups}
           />
-          <PopupWithForm
-            title="Редактировать профиль"
-            buttonText="Сохранить"
+
+          <EditProfilePopup
             isOpen={isEditProfilePopupOpened}
             onClose={closeAllPopups}
-            name="profile-edit"
-            children={
-              <>
-                <input className="popup__input-form" id="inputName" name="profileName" minLength="2" maxLength="40" placeholder="Имя" required />
-                <span id="inputName-error" className="popup__error popup__error_visible" />
-                <input className="popup__input-form" id="inputJob" name="profileJob" minLength="2" maxLength="200" placeholder="О себе" required />
-                <span id="inputJob-error" className="popup__error popup__error_visible" />
-              </>
-            }
+            onUpdateUser={handleUpdateUser}
           />
+
           <PopupWithForm
             title="Новое место"
             buttonText="Создать"
