@@ -1,8 +1,6 @@
 import pen from '../images/pen.png';
 import { api } from '../utils/Api';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { useContext } from 'react';
+import { useContext, } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { DataCardsContext } from '../contexts/DataCardsContext';
 import Card from './Card';
@@ -19,30 +17,8 @@ function Main(
     handleCardDelete
   }
 ) {
-  // const [userName, setUserName] = useState('');
-  // const [userDescription, setUserDescription] = useState('');
-  // const [userAvatar, setUserAvatar] = useState('');
-  // const [cards, setCards] = useState([]);
-  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
-const [ cards, setCards] = useContext(DataCardsContext);
-
-  // console.log('currentUser', currentUser);
-
-  // useEffect(() => {
-  //   Promise.all([
-  //     // api.getProfile(),
-  //     api.getInitialCards()
-  //   ])
-  //     .then(([
-  //       // profile, 
-  //       initialCards]) => {
-  //       // setUserName(profile.name);
-  //       // setUserDescription(profile.about);
-  //       // setUserAvatar(profile.avatar);
-  //       setCards(initialCards);
-  //     })
-  //     .catch(err => console.log(`Ошибка: ${err}`));
-  // }, []);
+  const currentUser = useContext(CurrentUserContext);
+  const cards = useContext(DataCardsContext);
 
   const generatedCards = cards.map((card) => (
     <li className="element" key={card._id}>
@@ -55,7 +31,7 @@ const [ cards, setCards] = useContext(DataCardsContext);
         onCardDelete={handleCardDelete}
       />
     </li>
-  ))
+  ));
 
   return (
     <main>

@@ -9,6 +9,7 @@ import { api } from '../utils/Api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { DataCardsContext } from '../contexts/DataCardsContext';
 import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
 
 
 
@@ -29,6 +30,7 @@ function App() {
       .then(([profile, initialCards]) => {
         setCurrentUser(profile);
         setCards(initialCards);
+        // console.log('initialCards', initialCards);
       })
       .catch(err => console.log(`Ошибка: ${err}`));
   }, []);
@@ -82,12 +84,23 @@ function App() {
       .catch(err => console.log(`Ошибка: ${err}`))
   }
 
+  function handleUpdateAvatar(avatar) {
+    api.updateAvatar(avatar)
+      .then((newUserInfo) => {
+        setCurrentUser(newUserInfo);
+        closeAllPopups();
+      }
+      )
+      .catch(err => console.log(`Ошибка: ${err}`))
+  }
+
 
   return (
-    <CurrentUserContext.Provider value={[currentUser, setCurrentUser]}>
-      <DataCardsContext.Provider value={[cards, setCards]}>
+    <CurrentUserContext.Provider value={currentUser}>
+      <DataCardsContext.Provider value={cards}>
         <div className="App">
           <Header />
+
           <Main
             onEditAvatar={handleEditAvatarClick}
             onEditProfile={handleEditProfileClick}
@@ -99,18 +112,11 @@ function App() {
             handleCardDelete={handleCardDelete}
           />
           <Footer />
-          <PopupWithForm
-            title="Обновить аватар"
-            buttonText="Сохранить"
+
+          <EditAvatarPopup
             isOpen={isEditAvatarPopupOpened}
-            name="update-avatar"
-            children={
-              <>
-                <input className="popup__input-form" type="url" id="inputAvatarLink" name="AvatarLink" placeholder="Ссылка на картинку" required />
-                <span id="inputAvatarLink-error" className="popup__error popup__error_visible"></span>
-              </>
-            }
             onClose={closeAllPopups}
+            onUpdateAvatar={handleUpdateAvatar}
           />
 
           <EditProfilePopup
