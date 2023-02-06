@@ -32,6 +32,7 @@ function EditProfilePopup({
 			name,
 			about: description
 		});
+		onClose();
 	}
 
 	return (
@@ -55,7 +56,10 @@ function EditProfilePopup({
 						placeholder="Имя"
 						required
 					/>
-					<span id="inputName-error" className="popup__error popup__error_visible" />
+					<span
+						id="inputName-error"
+						className="popup__error popup__error_visible"
+					/>
 					<input
 						value={description || ""}
 						onChange={handleChangeDescription}
@@ -67,7 +71,10 @@ function EditProfilePopup({
 						placeholder="О себе"
 						required
 					/>
-					<span id="inputJob-error" className="popup__error popup__error_visible" />
+					<span
+						id="inputJob-error"
+						className="popup__error popup__error_visible"
+					/>
 				</>
 			}
 		/>

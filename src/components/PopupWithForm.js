@@ -27,7 +27,11 @@ function PopupWithForm(
         >
           <h2 className="popup__form-title">{title}</h2>
           {children}
-          <button className="popup__save-button" type="submit">{buttonText}</button>
+          <button
+            className="popup__save-button"
+            type="submit">
+            {buttonText}
+          </button>
         </form>
       </div>
     </div>

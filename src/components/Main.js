@@ -1,8 +1,6 @@
 import pen from '../images/pen.png';
-import { api } from '../utils/Api';
 import { useContext, } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { DataCardsContext } from '../contexts/DataCardsContext';
 import Card from './Card';
 
 function Main(
@@ -13,12 +11,12 @@ function Main(
     isImagePopupOpened,
     setIsImagePopupOpened,
     setSelectedCard,
-    handleCardLike,
-    handleCardDelete
+    onCardLike,
+    onCardDelete,
+    cards
   }
 ) {
   const currentUser = useContext(CurrentUserContext);
-  const cards = useContext(DataCardsContext);
 
   const generatedCards = cards.map((card) => (
     <li className="element" key={card._id}>
@@ -27,8 +25,8 @@ function Main(
         onCardClick={setSelectedCard}
         isImagePopupOpened={isImagePopupOpened}
         setIsImagePopupOpened={setIsImagePopupOpened}
-        onCardLike={handleCardLike}
-        onCardDelete={handleCardDelete}
+        onCardLike={onCardLike}
+        onCardDelete={onCardDelete}
       />
     </li>
   ));

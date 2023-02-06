@@ -12,6 +12,9 @@ function EditAvatarPopup({
 	function handleSubmit(evt) {
 		evt.preventDefault();
 		onUpdateAvatar(avatarLink.current.value);
+		avatarLink.current.value = "";
+		onClose();
+
 	}
 	return (
 		<PopupWithForm
@@ -32,7 +35,10 @@ function EditAvatarPopup({
 						required
 						ref={avatarLink}
 					/>
-					<span id="inputAvatarLink-error" className="popup__error popup__error_visible"></span>
+					<span
+						id="inputAvatarLink-error"
+						className="popup__error popup__error_visible"
+					/>
 				</>
 			}
 		/>

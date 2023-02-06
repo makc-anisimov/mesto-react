@@ -1,17 +1,14 @@
-
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 import { useEffect, useState } from 'react';
-import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import { api } from '../utils/Api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { DataCardsContext } from '../contexts/DataCardsContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
-
-
+import AddPlacePopup from './AddPlacePopup';
 
 function App() {
   const [isEditAvatarPopupOpened, setIsEditAvatarPopupOpened] = useState(false);
@@ -30,10 +27,9 @@ function App() {
       .then(([profile, initialCards]) => {
         setCurrentUser(profile);
         setCards(initialCards);
-        // console.log('initialCards', initialCards);
       })
       .catch(err => console.log(`Ошибка: ${err}`));
-  }, []);
+  }, [cards]);
 
 
   function handleEditAvatarClick() {
@@ -47,7 +43,6 @@ function App() {
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpened(true);
   };
-
 
   function closeAllPopups() {
     setIsEditAvatarPopupOpened(false);
@@ -69,7 +64,6 @@ function App() {
     const updatedCards = cards.filter(cardItem => cardItem.id != card._id);
     api.deleteCard(card._id)
       .then(() => {
-        console.log('updatedCards', updatedCards);// ТЕСТ!!! проверка нового массива
         setCards(updatedCards);
       })
       .catch(err => console.log(`Ошибка: ${err}`))
@@ -79,7 +73,6 @@ function App() {
     api.edtiProfile(userInfo.name, userInfo.about)
       .then((newUserInfo) => {
         setCurrentUser(newUserInfo);
-        closeAllPopups();
       })
       .catch(err => console.log(`Ошибка: ${err}`))
   }
@@ -88,19 +81,27 @@ function App() {
     api.updateAvatar(avatar)
       .then((newUserInfo) => {
         setCurrentUser(newUserInfo);
-        closeAllPopups();
       }
       )
       .catch(err => console.log(`Ошибка: ${err}`))
   }
 
+  function handleAddPlace({
+    name,
+    link
+  }) {
+    api.addCard(name, link)
+      .then((newCard) => {
+        setCards([newCard, ...cards]); 
+      })
+      .catch(err => console.log(`Ошибка: ${err}`))
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <DataCardsContext.Provider value={cards}>
         <div className="App">
           <Header />
-
           <Main
             onEditAvatar={handleEditAvatarClick}
             onEditProfile={handleEditProfileClick}
@@ -108,38 +109,27 @@ function App() {
             isImagePopupOpened={isImagePopupOpened}
             setIsImagePopupOpened={setIsImagePopupOpened}
             setSelectedCard={setSelectedCard}
-            handleCardLike={handleCardLike}
-            handleCardDelete={handleCardDelete}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
+            cards={cards}
           />
           <Footer />
-
           <EditAvatarPopup
             isOpen={isEditAvatarPopupOpened}
             onClose={closeAllPopups}
             onUpdateAvatar={handleUpdateAvatar}
           />
-
           <EditProfilePopup
             isOpen={isEditProfilePopupOpened}
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
           />
-
-          <PopupWithForm
-            title="Новое место"
-            buttonText="Создать"
-            onClose={closeAllPopups}
+          <AddPlacePopup
             isOpen={isAddPlacePopupOpened}
-            name="add-photo"
-            children={
-              <>
-                <input className="popup__input-form" id="inputMestoName" name="mestoName" minLength="2" maxLength="30" placeholder="Название" required />
-                <span id="inputMestoName-error" className="popup__error popup__error_visible" />
-                <input className="popup__input-form" type="url" id="inputMestoLink" name="mestoLink" placeholder="Ссылка на картинку" required />
-                <span id="inputMestoLink-error" className="popup__error popup__error_visible" />
-              </>
-            }
+            onClose={closeAllPopups}
+            onAddPlace={handleAddPlace}
           />
+
           <ImagePopup
             isOpen={isImagePopupOpened}
             card={selectedCard}
