@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useState } from "react";
 import PopupWithForm from "./PopupWithForm";
 
 function AddPlacePopup({
@@ -6,19 +6,30 @@ function AddPlacePopup({
 	onClose,
 	onAddPlace
 }) {
-	const newPlaceName = useRef();
-	const newPlaceLink = useRef();
+	const [newPlaceName, setNewPlaceName] = useState("");
+	const [newPlaceLink, setNewPlaceLink] = useState("");
+
+	useEffect(() => {
+		setNewPlaceName("");
+		setNewPlaceLink("");
+	}, [isOpen]);
+
+	function handleChangePlaceName(evt) {
+		setNewPlaceName(evt.target.value);
+	}
+
+	function handleChangePlaceLink(evt) {
+		setNewPlaceLink(evt.target.value);
+	}
 
 	function handleSubmit(evt) {
 		evt.preventDefault();
 		onAddPlace({
-			name: newPlaceName.current.value,
-			link: newPlaceLink.current.value
+			name: newPlaceName,
+			link: newPlaceLink
 		});
-		newPlaceName.current.value = "";
-		newPlaceLink.current.value = "";
-		onClose();
 	}
+
 	return (
 		<PopupWithForm
 			title="Новое место"
@@ -37,7 +48,8 @@ function AddPlacePopup({
 						maxLength="30"
 						placeholder="Название"
 						required
-						ref={newPlaceName}
+						value={newPlaceName}
+						onChange={handleChangePlaceName}
 					/>
 					<span
 						id="inputMestoName-error"
@@ -50,7 +62,8 @@ function AddPlacePopup({
 						name="mestoLink"
 						placeholder="Ссылка на картинку"
 						required
-						ref={newPlaceLink}
+						value={newPlaceLink}
+						onChange={handleChangePlaceLink}
 					/>
 					<span
 						id="inputMestoLink-error"

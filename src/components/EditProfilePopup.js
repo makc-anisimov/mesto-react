@@ -32,7 +32,6 @@ function EditProfilePopup({
 			name,
 			about: description
 		});
-		onClose();
 	}
 
 	return (
@@ -43,43 +42,40 @@ function EditProfilePopup({
 			onClose={onClose}
 			onSubmit={handleSubmit}
 			name="profile-edit"
-			children={
-				<>
-					<input
-						value={name || ""}
-						onChange={handleChangeName}
-						className="popup__input-form"
-						id="inputName"
-						name="profileName"
-						minLength="2"
-						maxLength="40"
-						placeholder="Имя"
-						required
-					/>
-					<span
-						id="inputName-error"
-						className="popup__error popup__error_visible"
-					/>
-					<input
-						value={description || ""}
-						onChange={handleChangeDescription}
-						className="popup__input-form"
-						id="inputJob"
-						name="profileJob"
-						minLength="2"
-						maxLength="200"
-						placeholder="О себе"
-						required
-					/>
-					<span
-						id="inputJob-error"
-						className="popup__error popup__error_visible"
-					/>
-				</>
-			}
+			children={<>
+				<input
+					value={name || ""}
+					onChange={handleChangeName}
+					className="popup__input-form"
+					id="inputName"
+					name="profileName"
+					minLength="2"
+					maxLength="40"
+					placeholder="Имя"
+					required
+				/>
+				<span
+					id="inputName-error"
+					className="popup__error popup__error_visible"
+				/>
+				<input
+					value={description || ""}
+					onChange={handleChangeDescription}
+					className="popup__input-form"
+					id="inputJob"
+					name="profileJob"
+					minLength="2"
+					maxLength="200"
+					placeholder="О себе"
+					required
+				/>
+				<span
+					id="inputJob-error"
+					className="popup__error popup__error_visible"
+				/>
+			</>}
 		/>
 	)
-
 }
 
 export default EditProfilePopup;

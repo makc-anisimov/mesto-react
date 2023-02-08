@@ -21,7 +21,7 @@ function PopupWithForm(
         <form
           className="popup__form"
           id=""
-          name=""
+          name={name}
           method="post"
           onSubmit={onSubmit}
         >

@@ -9,7 +9,6 @@ function Card({
 	onCardDelete
 }) {
 	const currentUser = useContext(CurrentUserContext);
-	// const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
 	const isOwn = card.owner._id === currentUser._id;
 	const isLiked = card.likes.some(i => i._id === currentUser._id);
 	const cardLikeButtonClassName = (`element__like ${isLiked && 'element__like_active'}`);
@@ -22,7 +21,6 @@ function Card({
 
 	function handleDeleteClick() {
 		onCardDelete(card)
-		// console.log('удалили карточку',card);// TEST!!!
 	}
 
 	function handleLikeClick() {
@@ -31,7 +29,12 @@ function Card({
 
 	return (
 		<>
-			{isOwn && <button onClick={handleDeleteClick} className="element__delete-button link" type="button" aria-label="Удалить место" />}
+			{isOwn && <button
+									onClick={handleDeleteClick}
+									className="element__delete-button link"
+									type="button"
+									aria-label="Удалить место"
+			/>}
 			<img className="element__photo"
 				src={card.link}
 				alt={card.name}

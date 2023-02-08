@@ -29,7 +29,7 @@ function App() {
         setCards(initialCards);
       })
       .catch(err => console.log(`Ошибка: ${err}`));
-  }, [cards]);
+  }, []);
 
 
   function handleEditAvatarClick() {
@@ -61,7 +61,7 @@ function App() {
   }
 
   function handleCardDelete(card) {
-    const updatedCards = cards.filter(cardItem => cardItem.id != card._id);
+    const updatedCards = cards.filter(cardItem => cardItem._id !== card._id);
     api.deleteCard(card._id)
       .then(() => {
         setCards(updatedCards);
@@ -73,6 +73,7 @@ function App() {
     api.edtiProfile(userInfo.name, userInfo.about)
       .then((newUserInfo) => {
         setCurrentUser(newUserInfo);
+        closeAllPopups();
       })
       .catch(err => console.log(`Ошибка: ${err}`))
   }
@@ -81,8 +82,8 @@ function App() {
     api.updateAvatar(avatar)
       .then((newUserInfo) => {
         setCurrentUser(newUserInfo);
-      }
-      )
+        closeAllPopups();
+      })
       .catch(err => console.log(`Ошибка: ${err}`))
   }
 
@@ -92,7 +93,8 @@ function App() {
   }) {
     api.addCard(name, link)
       .then((newCard) => {
-        setCards([newCard, ...cards]); 
+        setCards([newCard, ...cards]);
+        closeAllPopups();
       })
       .catch(err => console.log(`Ошибка: ${err}`))
   }
@@ -129,7 +131,6 @@ function App() {
             onClose={closeAllPopups}
             onAddPlace={handleAddPlace}
           />
-
           <ImagePopup
             isOpen={isImagePopupOpened}
             card={selectedCard}
@@ -140,5 +141,4 @@ function App() {
     </CurrentUserContext.Provider>
   );
 }
-
 export default App;
